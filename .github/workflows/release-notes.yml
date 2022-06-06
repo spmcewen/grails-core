@@ -12,7 +12,7 @@ jobs:
   release_notes:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
       - name: Check if it has release drafter config file
         id: check_release_drafter
         run: |
@@ -22,7 +22,7 @@ jobs:
         id: extract_branch
         run: echo ::set-output name=value::${GITHUB_REF:11}
       # If it has release drafter:
-      - uses: release-drafter/release-drafter@v5.20.0
+      - uses: release-drafter/release-drafter@ac463ffd9cc4c6ad5682af93dc3e3591c4657ee3 # tag=v5.20.0
         if: steps.check_release_drafter.outputs.has_release_drafter == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -38,7 +38,7 @@ jobs:
         id: release_notes
         with:
           token: ${{ secrets.GH_TOKEN }}
-      - uses: ncipollo/release-action@v1
+      - uses: ncipollo/release-action@58ae73b360456532aafd58ee170c045abbeaee37 # tag=v1
         if: steps.check_release_drafter.outputs.has_release_drafter == 'false' && steps.release_notes.outputs.generated_changelog == 'true'
         with:
           allowUpdates: true

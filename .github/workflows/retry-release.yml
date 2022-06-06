@@ -20,13 +20,13 @@ jobs:
       GRADLE_OPTS: -Xmx1500m -Dfile.encoding=UTF-8
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # tag=v3
         with:
           ref: "v${{ github.event.inputs.release }}"
           token: ${{ secrets.GH_TOKEN }}
-      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b # tag=v1
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@860f60056505705214d223b91ed7a30f173f6142 # tag=v3
         with:
           distribution: 'adopt'
           java-version: ${{ matrix.java }}
@@ -44,7 +44,7 @@ jobs:
           VERSION: ${{ github.event.inputs.release }}
       - name: Run Assemble
         id: assemble
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@e88ed3e650b26bd116cfee53cf198c1f6856682d # tag=v2
         with:
           arguments: assemble
       - name: Export Gradle Properties
@@ -68,7 +68,7 @@ jobs:
       - name: Invoke grails-doc release workflow
         if: steps.assemble.outcome == 'success'
         id: grails_doc
-        uses: benc-uk/workflow-dispatch@v1.1
+        uses: benc-uk/workflow-dispatch@4c044c1613fabbe5250deadc65452d54c4ad4fc7 # tag=v1.1
         with:
           workflow: Release
           repo: grails/grails-doc
@@ -78,7 +78,7 @@ jobs:
       - name: Invoke grails-static-website release workflow
         if: steps.assemble.outcome == 'success'
         id: grails_static_website
-        uses: benc-uk/workflow-dispatch@v1.1
+        uses: benc-uk/workflow-dispatch@4c044c1613fabbe5250deadc65452d54c4ad4fc7 # tag=v1.1
         with:
           workflow: Release
           repo: grails/grails-static-website
@@ -87,7 +87,7 @@ jobs:
           inputs: ${{ steps.grails_docs_release_message.outputs.value }}
       - name: Grails SDK Minor Release
         if: steps.upload_artifact.outcome == 'success' && contains(steps.release_version.outputs.release_version, 'M') || contains(steps.release_version.outputs.release_version, 'RC')
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@e88ed3e650b26bd116cfee53cf198c1f6856682d # tag=v2
         with:
           arguments: sdkMinorRelease
         env:
@@ -95,7 +95,7 @@ jobs:
           GVM_SDKVENDOR_TOKEN: ${{ secrets.GVM_SDKVENDOR_TOKEN }}
       - name: Grails SDK Major Release
         if: steps.upload_artifact.outcome == 'success' && !contains(steps.release_version.outputs.release_version, 'M') && !contains(steps.release_version.outputs.release_version, 'RC')
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@e88ed3e650b26bd116cfee53cf198c1f6856682d # tag=v2
         with:
           arguments: sdkMajorRelease
         env:
